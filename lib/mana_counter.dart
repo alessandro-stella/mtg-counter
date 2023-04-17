@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ManaCounter extends StatefulWidget {
-  const ManaCounter({super.key, required this.type});
+class ManaCounter extends StatelessWidget {
+  const ManaCounter(
+      {super.key,
+      required this.type,
+      required this.value,
+      required this.setter});
 
   final String type;
-
-  @override
-  State<ManaCounter> createState() => _ManaCounterState();
-}
-
-class _ManaCounterState extends State<ManaCounter> {
-  int counter = 0;
+  final int value;
+  final dynamic setter;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class _ManaCounterState extends State<ManaCounter> {
       child: Stack(
         children: [
           Image.asset(
-            "assets/${widget.type}.png",
+            "assets/$type.png",
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width / 2,
             height: MediaQuery.of(context).size.height / 3,
@@ -29,36 +28,38 @@ class _ManaCounterState extends State<ManaCounter> {
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black.withOpacity(0.2),
+                    backgroundColor: Colors.transparent,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                     ),
                   ),
-                  onPressed: () => setState(() {
-                    counter++;
-                  }),
-                  child: const Text("Up"),
+                  onPressed: () => setter(type, value + 1),
+                  child: const Icon(
+                    Icons.expand_less,
+                    size: 40,
+                  ),
                 ),
               ),
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black.withOpacity(0.2),
+                    backgroundColor: Colors.transparent,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                     ),
                   ),
-                  onPressed: () => setState(() {
-                    counter = counter-- > 0 ? counter-- : 0;
-                  }),
-                  child: const Text("Down"),
+                  onPressed: () => setter(type, value - 1 > 0 ? value - 1 : 0),
+                  child: const Icon(
+                    Icons.expand_more,
+                    size: 40,
+                  ),
                 ),
               )
             ],
           ),
           Center(
             child: Text(
-              counter.toString(),
+              value.toString(),
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 30,
