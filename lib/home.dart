@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mtg_counter/life_counter.dart';
 import 'package:mtg_counter/mana_counter.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,7 +11,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool showMana = true;
+  bool showMana = false;
 
   int white = 0;
   int blue = 0;
@@ -129,6 +130,18 @@ class _HomeState extends State<Home> {
       myLife = 20;
       opponentLife = 20;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Wakelock.enable();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Wakelock.disable();
   }
 
   @override
