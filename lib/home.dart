@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mtg_counter/center_button.dart';
 import 'package:mtg_counter/life_counter.dart';
 import 'package:mtg_counter/mana_counter.dart';
 import 'package:wakelock/wakelock.dart';
+import 'dart:async';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,6 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool showMana = false;
+  bool throwingDices = false;
 
   int white = 0;
   int blue = 0;
@@ -144,6 +147,26 @@ class _HomeState extends State<Home> {
     Wakelock.disable();
   }
 
+  showAndHideMana() {
+    setState(() {
+      showMana = !showMana;
+    });
+  }
+
+  throwDices() {
+    if (throwingDices) return;
+
+    setState(() {
+      throwingDices = true;
+    });
+
+    Timer(const Duration(seconds: 10), () {
+      setState(() {
+        throwingDices = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double borderSize = 5;
@@ -226,93 +249,81 @@ class _HomeState extends State<Home> {
                       LifeCounter(
                           isMe: false,
                           lifeCounter: opponentLife,
+                          throwingDices: throwingDices,
                           setter: setValue),
                       SizedBox(height: borderSize),
                       LifeCounter(
-                          isMe: true, lifeCounter: myLife, setter: setValue)
+                          isMe: true,
+                          lifeCounter: myLife,
+                          throwingDices: throwingDices,
+                          setter: setValue)
                     ],
                   ),
 
                 // Buttons
-                Center(
-                  child: showMana
-                      ?
-                      // Show for mana counters
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  foregroundColor: Colors.black,
-                                  backgroundColor: Colors.white,
-                                  shape: const CircleBorder()),
-                              child: const Icon(
-                                Icons.sync_alt,
-                                color: Colors.black,
-                                size: 40,
+                if (!throwingDices)
+                  Center(
+                    child: showMana
+                        ?
+                        // Show for mana counters
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              //Change mode
+                              CenterButton(
+                                icon: Icons.sync_alt,
+                                f: () => showAndHideMana(),
                               ),
-                              onPressed: () => setState(() {
-                                showMana = !showMana;
-                              }),
-                            ),
-                            const SizedBox(height: 150),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                shape: const CircleBorder(),
+                              const SizedBox(
+                                height: 40,
                               ),
-                              child: const Icon(
-                                Icons.sync,
-                                color: Colors.black,
-                                size: 40,
+
+                              //Reset values
+                              CenterButton(
+                                icon: Icons.sync,
+                                f: () => showMessageDialog(
+                                    "Attenzione",
+                                    "Vuoi davvero resettare il mana in pool? Quest'azione non può essere annullata",
+                                    resetMana),
                               ),
-                              onPressed: () => showMessageDialog(
-                                  "Attenzione",
-                                  "Vuoi davvero resettare il mana in pool? Quest'azione non può essere annullata",
-                                  resetMana),
-                            ),
-                          ],
-                        )
-                      :
-                      // Show for life counters
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  foregroundColor: Colors.black,
-                                  backgroundColor: Colors.white,
-                                  shape: const CircleBorder()),
-                              child: const Icon(
-                                Icons.sync_alt,
-                                color: Colors.black,
-                                size: 40,
+                            ],
+                          )
+                        :
+                        // Show for life counters
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              //Change mode
+                              CenterButton(
+                                icon: Icons.sync_alt,
+                                f: () => showAndHideMana(),
                               ),
-                              onPressed: () => setState(() {
-                                showMana = !showMana;
-                              }),
-                            ),
-                            const SizedBox(width: 80),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                shape: const CircleBorder(),
+
+                              const SizedBox(
+                                width: 40,
                               ),
-                              child: const Icon(
-                                Icons.sync,
-                                color: Colors.black,
-                                size: 40,
+
+                              //Throw dice
+                              CenterButton(
+                                icon: Icons.casino,
+                                f: () => throwDices(),
                               ),
-                              onPressed: () => showMessageDialog(
-                                  "Attenzione",
-                                  "Vuoi davvero resettare i contatori della vita? Quest'azione non può essere annullata",
-                                  resetLife),
-                            ),
-                          ],
-                        ),
-                )
+
+                              const SizedBox(
+                                width: 40,
+                              ),
+
+                              //Reset values
+                              CenterButton(
+                                icon: Icons.sync,
+                                f: () => showMessageDialog(
+                                    "Attenzione",
+                                    "Vuoi davvero resettare la vita? Quest'azione non può essere annullata",
+                                    resetMana),
+                              ),
+                            ],
+                          ),
+                  ),
               ],
             ),
           ),
