@@ -28,7 +28,8 @@ class ManaCounter extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: Colors.black.withOpacity(0.15),
+                    foregroundColor: Colors.black,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                     ),
@@ -37,13 +38,15 @@ class ManaCounter extends StatelessWidget {
                   child: const Icon(
                     Icons.expand_less,
                     size: 40,
+                    color: Colors.white,
                   ),
                 ),
               ),
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: Colors.black.withOpacity(0.15),
+                    foregroundColor: Colors.black,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                     ),
@@ -52,6 +55,7 @@ class ManaCounter extends StatelessWidget {
                   child: const Icon(
                     Icons.expand_more,
                     size: 40,
+                    color: Colors.white,
                   ),
                 ),
               )

@@ -32,7 +32,16 @@ class LifeCounter extends StatelessWidget {
                   Container(
                     color: Colors.black.withOpacity(0.15),
                     child: const Center(
-                      child: Dice(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Dice(),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Dice()
+                        ],
+                      ),
                     ),
                   )
                 else

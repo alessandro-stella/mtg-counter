@@ -117,6 +117,26 @@ class _HomeState extends State<Home> {
     }
   }
 
+  void addWURBG() {
+    setState(() {
+      white = white + 1;
+      blue = blue + 1;
+      black = black + 1;
+      red = red + 1;
+      green = green + 1;
+    });
+  }
+
+  void removeWURBG() {
+    setState(() {
+      white = white - 1 >= 0 ? white - 1 : 0;
+      blue = blue - 1 >= 0 ? blue - 1 : 0;
+      black = black - 1 >= 0 ? black - 1 : 0;
+      red = red - 1 >= 0 ? red - 1 : 0;
+      green = green - 1 >= 0 ? green - 1 : 0;
+    });
+  }
+
   void resetMana() {
     setState(() {
       white = 0;
@@ -278,6 +298,24 @@ class _HomeState extends State<Home> {
                                 height: 40,
                               ),
 
+                              // Add 1 WURBG
+                              CenterButton(
+                                icon: Icons.add,
+                                f: () => addWURBG(),
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+
+                              // Remove 1 WURBG
+                              CenterButton(
+                                icon: Icons.remove,
+                                f: () => removeWURBG(),
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+
                               //Reset values
                               CenterButton(
                                 icon: Icons.sync,
@@ -319,7 +357,7 @@ class _HomeState extends State<Home> {
                                 f: () => showMessageDialog(
                                     "Attenzione",
                                     "Vuoi davvero resettare la vita? Quest'azione non può essere annullata",
-                                    resetMana),
+                                    resetLife),
                               ),
                             ],
                           ),
